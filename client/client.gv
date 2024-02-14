@@ -1,0 +1,34 @@
+digraph Client {
+  node [shape = circle; fontsize = 10; width = 1; height = 1; fontsize = 15;];
+  edge [fontsize = 15;];
+  
+  Start [label = "Start";shape = doublecircle;];
+  WaitForUserInput [label = "WaitForUserInput";];
+  ReadFile [label = "ReadFile";];
+  SocketCreated [label = "SocketCreated";];
+  SocketConnected [label = "SocketConnected";];
+  FileContentsSent [label = "FileContentsSent";];
+  ResultReceived [label = "ResultReceived";];
+  Displayed [label = "Displayed";];
+  Cleanup [label = "Cleanup";];
+  Quit [label = "Quit";];
+  Exit [label = "Exit";shape = doublecircle;];
+  
+  Start -> WaitForUserInput [label = "HandleUserInput";];
+  WaitForUserInput -> Quit [label = "Quit";];
+  WaitForUserInput -> ReadFile [label = "ReadFile";];
+  ReadFile -> SocketCreated [label = "CreateSocket";];
+  SocketCreated -> SocketConnected [label = "ConnectToSocket";];
+  SocketConnected -> FileContentsSent [label = "HandleSend";];
+  FileContentsSent -> ResultReceived [label = "HandleReceive";];
+  ResultReceived -> Displayed [label = "DisplayResults";];
+  Displayed -> Cleanup [label = "CloseSocket";];
+  
+  ReadFile -> WaitForUserInput [label = "Read File Error";];
+  SocketCreated -> WaitForUserInput [label = "Create Socket Error";];
+  SocketConnected -> WaitForUserInput [label = "Connect Error";];
+  FileContentsSent -> WaitForUserInput [label = "Socket Write Error";];
+  ResultReceived -> WaitForUserInput [label = "Socket Read Error";];
+  Cleanup -> WaitForUserInput [label = "Close Socket";];
+  Quit -> Exit [label = "Exit";];
+}

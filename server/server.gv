@@ -1,0 +1,25 @@
+digraph Server {
+  node [shape = circle; fontsize = 10; width = 1; height = 1; fontsize = 15;];
+  edge [fontsize = 15;];
+  
+  Start [label = "Start";shape = doublecircle;];
+  SocketCreated [label = "SocketCreated";shape = circle;];
+  SocketBinded [label = "Socket Binded";shape = circle;];
+  Listening [label = "Listening";shape = circle;];
+  ConnectReceived [label = "ConnectionReceived";shape = circle;];
+  HandleConnection [label = "HandleConnection";shape = circle;];
+  Cleanup [label = "Cleanup";shape = circle;];
+  Exit [label = "Exit";shape = doublecircle;];
+  
+  Start -> SocketCreated [label = "CreateSocket";];
+  SocketCreated -> SocketBinded [label = "BindSocket";];
+  SocketBinded -> Listening [label = "Listen";];
+  Listening -> ConnectReceived [label = "AcceptConnection";];
+  ConnectReceived -> HandleConnection [label = "HandleConnection";];
+  HandleConnection -> ConnectReceived [label = "Connection Handled";];
+  Cleanup -> Exit [label = "Close Socket";];
+  
+  SocketCreated -> Cleanup [label = "Create Error";];
+  SocketBinded -> Cleanup [label = "Bind Error";];
+  Listening -> Cleanup [label = "Listen Error";];
+}
